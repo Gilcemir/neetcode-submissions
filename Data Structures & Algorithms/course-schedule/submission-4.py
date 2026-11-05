@@ -1,0 +1,22 @@
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        
+        adj: dict[int, list[int]] = defaultdict(list)
+        deg: list[int] = [0] * numCourses
+        for v, u in prerequisites:
+            adj[u].append(v)
+            deg[v] += 1       
+        
+        q = deque([v for v in range(numCourses) if deg[v] == 0])
+
+
+        visited = 0
+        while q:
+            u = q.popleft()
+            visited += 1
+            for v in adj[u]:
+                deg[v] -= 1
+                if deg[v] == 0:
+                    q.append(v)
+
+        return visited == numCourses
